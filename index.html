@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khabarbazi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <div class="main-nav container flex">
+            <div class="nav-links">
+                <ul class="flex" id="nav-list">
+                    <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+                    <li class="hover-link nav-item" id="sports" onclick="onNavItemClick('sports')">Sports</li>
+                    <li class="hover-link nav-item" id="crypto" onclick="onNavItemClick('crypto')">Crypto</li>
+                    <li class="hover-link nav-item" id="international" onclick="onNavItemClick('international')">International</li>
+                    <li class="hover-link nav-item" id="technical" onclick="onNavItemClick('technical')">Technical</li>
+                    <li class="hover-link nav-item" id="AI" onclick="onNavItemClick('AI')">AI</li>
+                    <li class="hover-link nav-item" id="education" onclick="onNavItemClick('education')">Education</li>
+                </ul>
+            </div>
+            <div class="search-bar flex">
+                <input id="search-text" type="text" class="news-input" placeholder="Finance, Science etc">
+                <button id="search-button" class="search-button">Search</button>
+            </div>
+            <!-- Hamburger Icon -->
+            <div class="hamburger" id="hamburger-icon" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="cards-container container flex" id="cards-container">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <!-- Template for News Card -->
+    <template id="template-news-card">
+        <div class="card">
+            <div class="card-header">
+                <img data-lazyloaded="1" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgNDAwIDIwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgc3R5bGU9ImZpbGw6I2NmZDRkYjtmaWxsLW9wYWNpdHk6IDAuMTsiLz48L3N2Zz4=" width="400" height="200" decoding="async" data-src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+            </div>
+            <div class="card-content">
+                <h3 id="news-title">This is the Title</h3>
+                <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6>
+                <p class="news-desc" id="news-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae saepe quis voluptatum quisquam vitae doloremque facilis molestias quae ratione cumque!</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- External JavaScript -->
+    <script src="script.js" type="text/javascript"></script>
+    <script>
+        const litespeed_vary = document.cookie.replace(/(?:(?:^|.*;\s*)_lscache_vary\s*\=\s*([^;]*).*$)|^.*$/, "");
+        if (!litespeed_vary) {
+            fetch("/wp-content/plugins/litespeed-cache/guest.vary.php", {
+                method: "POST",
+                cache: "no-cache",
+                redirect: "follow"
+            }).then(e => e.json()).then(e => {
+                console.log(e);
+                if (e.hasOwnProperty("reload") && e.reload === "yes") {
+                    sessionStorage.setItem("litespeed_docref", document.referrer);
+                    window.location.reload(true);
+                }
+            });
+        }
+    </script>
+
+    <!-- Lazy Loading Script -->
+    <script>
+        !function (t, e) {
+            "use strict";
+            function a() {
+                e.body.classList.add("litespeed_lazyloaded");
+            }
+            function n() {
+                console.log("[LiteSpeed] Start Lazy Load Images");
+                var d = new LazyLoad({
+                    elements_selector: "[data-lazyloaded]",
+                    callback_finish: a
+                });
+                o = function () { d.update(); };
+                if (t.MutationObserver) new MutationObserver(o).observe(e.documentElement, { childList: true, subtree: true, attributes: true });
+            }
+            t.addEventListener ? t.addEventListener("load", n, false) : t.attachEvent("onload", n);
+        }(window, document);
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Smooth Scroll Back to Top Button
+            const topButton = document.createElement('button');
+            topButton.textContent = "↑";
+            topButton.classList.add('back-to-top');
+            document.body.appendChild(topButton);
+
+            topButton.style.display = "none";
+
+            // Show button on scroll
+            window.addEventListener("scroll", function () {
+                if (window.scrollY > 400) {
+                    topButton.style.display = "block";
+                } else {
+                    topButton.style.display = "none";
+                }
+            });
+
+            // Scroll back to top smoothly
+            topButton.addEventListener("click", function () {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+
+            // Scroll-triggered animations
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.1,
+            };
+
+            const fadeInOnScroll = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("animate-visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Target each card to animate
+            document.querySelectorAll(".card").forEach(card => {
+                card.classList.add("animate-hidden");
+                fadeInOnScroll.observe(card);
+            });
+
+            // Typewriter Effect for Header
+            const header = document.querySelector("header h1");
+            const headerText = header.innerText;
+            header.innerText = ""; // Clear initial text
+            let index = 0;
+
+            function typeWriter() {
+                if (index < headerText.length) {
+                    header.innerText += headerText.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 100); // Adjust speed
+                }
+            }
+            typeWriter();
+        });
+    </script>
+    <script>
+        // Toggle the Nav menu on hamburger click
+function toggleNav() {
+    const navList = document.getElementById('nav-list');
+    navList.classList.toggle('active');
+}
+
+// Optionally close the menu when a nav item is clicked
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const navList = document.getElementById('nav-list');
+        navList.classList.remove('active');
+    });
+});
+
+// Typewriter Effect for Header
+const header = document.querySelector("header h1");
+const headerText = header.innerText;
+header.innerText = ""; // Clear initial text
+let index = 0;
+
+function typeWriter() {
+    if (index < headerText.length) {
+        header.innerText += headerText.charAt(index);
+        index++;
+        setTimeout(typeWriter, 100); // Adjust speed
+    }
+}
+typeWriter();
+
+    </script>
+
+</body>
+
+</html>
